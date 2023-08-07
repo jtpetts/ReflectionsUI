@@ -1,0 +1,139 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Info {
+  background-color: #282c34;
+  color: #fbfdfd;
+  opacity: 0.6;
+  pointer-events: "none";
+}
+
+.NoPointer {
+  pointer-events: "none";
+}
+
+.pointerEventsAuto {
+  pointer-events: "auto";
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.richBlue {
+  background-color: #333a4c;
+  color: white;
+}
+
+.instantRedBorder {
+  border: 1px solid red;
+}
+
+.instantBlueBorder {
+  border: 1px solid blue;
+}
+
+.buttonSpacing {
+  margin-left: 20px;
+}
+
+.tinySpacing {
+  margin-left: 10px;
+}
+
+.lowerSpacing {
+  margin-bottom: 20px;
+}
+
+.centeredSingleColumn {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.noMargin {
+  margin: 0 0 0 0 !important;
+}
+
+.noPadding {
+  padding: 0 0 0 0 !important;
+}
+
+.nakedButton {
+  padding: 0 0 0 0 !important;
+  background-color: Transparent !important;
+  outline: none !important;
+  border: none !important;
+}
+
+.relativeBasis {
+  position: relative;
+}
+
+.fixed {
+  /* position: absolute;*/
+  top: 0;
+  left: 0;
+}
+.fixedx {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.zoomButton {
+  background-color: #5abeb6 !important;
+}
+
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms linear;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit.fade-exit-active {
+  opacity: 0;
+  transition: opacity 1000ms linear;
+}
+
+.fade-exit-done {
+  opacity: 0;
+}
