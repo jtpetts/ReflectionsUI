@@ -3,7 +3,7 @@ import Pointer from "./common/pointer";
 import Info from "./info";
 import TutorialTip from "./tutorialTip";
 import Images from "../services/imageService";
-import { mapWidth } from "../config";
+import Config from "../config";
 
 class annotatedMap extends Component {
   computeDistance(x1, y1, x2, y2) {
@@ -15,7 +15,7 @@ class annotatedMap extends Component {
     var closestHotspot;
 
     const rect = this.refs.image.getBoundingClientRect();
-    const hotSpotToImageRatio = rect.width / mapWidth;
+    const hotSpotToImageRatio = rect.width / Config.mapWidth;
 
     this.props.map.hotSpots.forEach(hotspot => {
       var dist = this.computeDistance(
@@ -69,7 +69,7 @@ class annotatedMap extends Component {
           src={image}
           alt={"Map"}
           style={{
-            maxWidth: `${mapWidth * 2}px`,
+            maxWidth: `${Config.mapWidth * 2}px`,
             width: "100%",
             height: "auto"
           }}

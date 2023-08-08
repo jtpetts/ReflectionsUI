@@ -1,7 +1,7 @@
 import React from "react";
 import PositionableComponent from "./positionableComponent";
 import Pointer from "./common/pointer";
-import { pointerHeight, mapWidth } from "../config";
+import Config from "../config";
 
 class Info extends PositionableComponent {
   render() {
@@ -9,16 +9,16 @@ class Info extends PositionableComponent {
     if (!hotspot) return null;
 
     // position the text block
-    const minWidth = mapWidth * 0.5;
-    const imageWidth = mapWidth;
+    const minWidth = Config.mapWidth * 0.5;
+    const imageWidth = Config.mapWidth;
     const target = {
       x: hotspot.x + minWidth > imageWidth ? imageWidth - minWidth : hotspot.x,
       y: hotspot.y
     };
 
     // compute the height of the pointer as a percentage
-    const ratio = this.props.imageWidth / mapWidth;
-    target.y += pointerHeight / ratio;
+    const ratio = this.props.imageWidth / Config.mapWidth;
+    target.y += Config.pointerHeight / ratio;
 
     const style = this.getStyle(target);
 

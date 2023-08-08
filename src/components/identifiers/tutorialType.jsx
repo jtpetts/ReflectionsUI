@@ -1,14 +1,13 @@
 import imageGreenArrow from "../../images/arrow green.png";
 import imageBlueArrow from "../../images/arrow blue.png";
-import imageBackArrow from "../../images/arrow back.png";
 import localStorageService from "../../services/localStorageService";
-import { arrowWidth, arrowHeight, arrowHotX, arrowHotY } from "../../config";
+import Config from "../../config";
 
 const zoomIn = "zoomIn";
 const zoomOut = "zoomOut";
 const details = "details";
 
-function getMessage(type) {
+export function getMessage(type) {
   if (type === zoomIn) return "Click to zoom";
   if (type === zoomOut) return "Click to return";
   if (type === details) return "Click for details";
@@ -16,7 +15,7 @@ function getMessage(type) {
   return "";
 }
 
-function getTextColor(type) {
+export function getTextColor(type) {
   if (type === zoomIn) return "white";
   if (type === zoomOut) return "white";
   if (type === details) return "black";
@@ -24,7 +23,7 @@ function getTextColor(type) {
   return "black";
 }
 
-function getImage(type) {
+export function getImage(type) {
   if (type === zoomIn) return imageBlueArrow;
   if (type === zoomOut) return imageBlueArrow;
   if (type === details) return imageGreenArrow;
@@ -32,16 +31,16 @@ function getImage(type) {
   return imageGreenArrow;
 }
 
-function getDims(type) {
+export function getDims(type) {
   return {
-    width: arrowWidth,
-    height: arrowHeight,
-    hotX: arrowHotX,
-    hotY: arrowHotY
+    width: Config.arrowWidth,
+    height: Config.arrowHeight,
+    hotX: Config.arrowHotX,
+    hotY: Config.arrowHotY
   };
 }
 
-function isTutorialTipActive(type) {
+export function isTutorialTipActive(type) {
   if (type === zoomIn) return localStorageService.isZoomInActive();
   if (type === zoomOut) return localStorageService.isZoomOutActive();
   if (type === details) return localStorageService.isDetailsActive();

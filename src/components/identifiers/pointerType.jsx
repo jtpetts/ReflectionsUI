@@ -5,17 +5,7 @@ import imageNamedPointerDetails from "../../images/named pointer details.png";
 import imageNamedPointerZoom from "../../images/named pointer zoom.png";
 import imageNamedPointerActiveZoom from "../../images/named pointer active zoom.png";
 import imageNamedPointerActiveDetails from "../../images/named pointer active details.png";
-import {
-  pointerWidth,
-  pointerHeight,
-  pointerHotX,
-  pointerHotY,
-  namedWidth,
-  namedHeight,
-  namedHotX,
-  namedHotY
-} from "../../config";
-
+import Config from "../../config";
 const plainDetails = "plainDetails";
 const plainZoom = "plainZoom";
 const plainActive = "plainActive";
@@ -24,7 +14,7 @@ const namedZoom = "NamedZoom";
 const namedActiveZoom = "NamedActiveZoom";
 const namedActiveDetails = "NamedActiveDetails";
 
-function identify(size, active, type) {
+export function identify(size, active, type) {
   if (size === "named") {
     return active === "active"
       ? type === "zoom"
@@ -42,7 +32,7 @@ function identify(size, active, type) {
   }
 }
 
-function getImage(type) {
+export function getImage(type) {
   if (type === plainDetails) return imageGreenPointer;
   if (type === plainZoom) return imageBluePointer;
   if (type === plainActive) return imageActivePointer;
@@ -54,7 +44,7 @@ function getImage(type) {
   return imageGreenPointer;
 }
 
-function getDims(type) {
+export function getDims(type) {
   if (
     type === namedDetails ||
     type === namedZoom ||
@@ -62,23 +52,23 @@ function getDims(type) {
     type === namedActiveDetails
   ) {
     return {
-      width: namedWidth,
-      height: namedHeight,
-      hotX: namedHotX,
-      hotY: namedHotY
+      width: Config.namedWidth,
+      height: Config.namedHeight,
+      hotX: Config.namedHotX,
+      hotY: Config.namedHotY
     };
   }
 
   // other than named (plain pointer)
   return {
-    width: pointerWidth,
-    height: pointerHeight,
-    hotX: pointerHotX,
-    hotY: pointerHotY
+    width: Config.pointerWidth,
+    height: Config.pointerHeight,
+    hotX: Config.pointerHotX,
+    hotY: Config.pointerHotY
   };
 }
 
-function isButton(type) {
+export function isButton(type) {
   return type === namedZoom || type === namedActiveZoom;
 }
 

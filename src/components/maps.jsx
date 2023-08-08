@@ -7,7 +7,7 @@ import imageBackArrow from "../images/arrow back.png";
 import AnnotatedMap from "./annotatedMap";
 import Annotator from "./annotator";
 import Explorations from "./explorations";
-import { topMap, mapWidth } from "../config";
+import Config from "../config";
 
 class Maps extends Component {
   state = {
@@ -48,7 +48,7 @@ class Maps extends Component {
   }
 
   initMap = (maps, mapName) => {
-    if (!mapName) mapName = topMap;
+    if (!mapName) mapName = Config.topMap;
 
     const map = maps.find(m => m.name === mapName);
     const breadCrumbs = this.locateBreadcrumbs(maps, map);
@@ -127,7 +127,7 @@ class Maps extends Component {
     const user = AuthService.getCurrentUser();
 
     const imageDim =
-      this.state.imageDim > mapWidth * 2 ? mapWidth * 2 : this.state.imageDim;
+      this.state.imageDim > Config.mapWidth * 2 ? Config.mapWidth * 2 : this.state.imageDim;
 
     return (
       <div className="justify-content-center richBlue fullWorld">

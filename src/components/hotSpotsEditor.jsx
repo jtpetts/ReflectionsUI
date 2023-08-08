@@ -8,7 +8,7 @@ import HotSpotsTable from "./hotSpotsTable";
 import Paginator from "./common/paginator";
 import Pointer from "./common/pointer";
 import AreYouSureModal from "./common/areYouSureModal";
-import { mapWidth } from "../config";
+import Config from "../config";
 
 //https://moduscreate.com/blog/animated_drag_and_drop_with_react_native/
 
@@ -249,13 +249,13 @@ class HotSpotsEditor extends Component {
               <div className="col centeredSingleColumn">
                 <div
                   className="relativeBasis"
-                  style={{ width: mapWidth, height: mapWidth }}
+                  style={{ width: Config.mapWidth, height: Config.mapWidth }}
                 >
                   <img
                     ref="image"
                     src={image}
                     alt={name}
-                    width={mapWidth}
+                    width={Config.mapWidth}
                     onMouseMove={this.onMouseMove}
                     onClick={this.handleImageClick}
                   />

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { bloopWidth, bloopHeight } from "../../config";
+import Config from "../../config";
 
 class Circle extends Component {
   render() {
@@ -9,8 +9,8 @@ class Circle extends Component {
       position: "absolute",
       left: this.props.left,
       top: this.props.top,
-      width: bloopWidth,
-      height: bloopHeight,
+      width: Config.bloopWidth,
+      height: Config.bloopHeight,
       opacity: 0.3,
       pointerEvents: "none",
       display: this.props.display
