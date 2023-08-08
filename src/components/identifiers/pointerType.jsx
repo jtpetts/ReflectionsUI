@@ -72,9 +72,11 @@ export function isButton(type) {
   return type === namedZoom || type === namedActiveZoom;
 }
 
-export default {
+const pointerType = {
   identify,
   getImage,
   getDims,
   isButton
 };
+
+export default pointerType;
