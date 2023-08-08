@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import logger from "./logService";
 
-function setJwt(authToken) {
+export function setJwt(authToken) {
   axios.defaults.headers.common["x-auth-token"] = authToken;
 }
 
@@ -28,10 +28,11 @@ axios.interceptors.response.use(null, error => {
   return Promise.reject(error); // return control to the catch block
 });
 
-export default {
+const httpService = {
   setJwt,
   get: axios.get,
   put: axios.put,
   post: axios.post,
   delete: axios.delete
 };
+export default httpService;

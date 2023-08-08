@@ -32,14 +32,15 @@ const imageList = [
   { imageFilename: "Deepfort.jpg", image: imageDeepfort }
 ];
 
-function get(imageFilename) {
+export function get(imageFilename) {
   const image = imageList.find(i => i.imageFilename === imageFilename);
   if (image) return image.image;
   else return null;
 }
 
-function getImages() {
+export function getImages() {
   return imageList;
 }
 
-export default { get, getImages };
+const imageService = { get, getImages };
+export default imageService;

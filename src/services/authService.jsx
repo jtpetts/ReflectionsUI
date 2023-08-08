@@ -6,7 +6,7 @@ const itemName = "authtoken";
 HttpService.setJwt(getCurrentJwt());
 
 // posts a login and then stores in local storage
-async function login(user, password) {
+export async function login(user, password) {
   const credentials = {
     email: user,
     password: password
@@ -21,15 +21,15 @@ async function login(user, password) {
   HttpService.setJwt(token);
 }
 
-async function logout() {
+export async function logout() {
   localStorage.removeItem(itemName);
 }
 
-function getCurrentJwt() {
+export function getCurrentJwt() {
   return localStorage.getItem(itemName);
 }
 
-function getCurrentUser() {
+export function getCurrentUser() {
   try {
     return jwtDecode(getCurrentJwt());
   } catch (ex) {
@@ -37,9 +37,10 @@ function getCurrentUser() {
   }
 }
 
-export default {
+const authService = {
   login,
   logout,
   getCurrentJwt,
   getCurrentUser
 };
+export default authService;

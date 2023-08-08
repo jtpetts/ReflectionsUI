@@ -14,34 +14,34 @@ function increment(key) {
   localStorage.setItem(key, (parseKey(key) + 1).toString());
 }
 
-function isTipActive(key) {
-  return parseKey(key) < hideAt;
-}
+// function isTipActive(key) {
+//   return parseKey(key) < hideAt;
+// }
 
-function isDetailsActive() {
+export function isDetailsActive() {
   return false;
   //  return isTipActive(details);
 }
 
-function countDetailClick() {
+export function countDetailClick() {
   increment(details);
 }
 
-function isZoomInActive() {
+export function isZoomInActive() {
   return false;
   //  return isTipActive(zoomIn);
 }
 
-function countZoomInClick() {
+export function countZoomInClick() {
   increment(zoomIn);
 }
 
-function isZoomOutActive() {
+export function isZoomOutActive() {
   return false;
   //  return isTipActive(zoomOut);
 }
 
-function countZoomOutClick() {
+export function countZoomOutClick() {
   increment(zoomOut);
 }
 
@@ -53,7 +53,7 @@ function getMapsArray() {
   return foundMaps.split(",");
 }
 
-function foundMap(mapId) {
+export function foundMap(mapId) {
   const maps = getMapsArray();
   const map = maps.find(m => m === mapId);
 
@@ -64,11 +64,11 @@ function foundMap(mapId) {
   }
 }
 
-function countFoundMaps() {
+export function countFoundMaps() {
   return getMapsArray().length;
 }
 
-export default {
+const localStorageService = {
   isDetailsActive,
   countDetailClick,
   isZoomInActive,
@@ -78,3 +78,4 @@ export default {
   foundMap,
   countFoundMaps
 };
+export default localStorageService;
