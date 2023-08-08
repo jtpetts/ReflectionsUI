@@ -1,7 +1,7 @@
 const details = "refShowDetails";
 const zoomIn = "refShowZoomIn";
 const zoomOut = "refShowZoomOut";
-const hideAt = 3;
+// const hideAt = 3;
 
 function parseKey(key) {
   const countStr = localStorage.getItem(key);

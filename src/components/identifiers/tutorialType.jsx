@@ -48,10 +48,11 @@ export function isTutorialTipActive(type) {
   return true;
 }
 
-export default {
+const tutorialType = {
   getMessage,
   getTextColor,
   getImage,
   getDims,
   isTutorialTipActive
 };
+export default tutorialType;
