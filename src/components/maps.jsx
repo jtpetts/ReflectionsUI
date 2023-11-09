@@ -43,7 +43,7 @@ class Maps extends Component {
     await this.initMap(maps, this.props.match.params.mapName);
   }
 
-  async componentWillReceiveProps(nextProps) {
+  async UNSAFE_componentWillReceiveProps(nextProps) {
     await this.initMap(this.state.maps, nextProps.match.params.mapName);
   }
 
