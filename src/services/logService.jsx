@@ -2,8 +2,14 @@ import * as Sentry from "@sentry/browser";
 import env from "../env";
 
 export function init() {
+  // Sentry.init({
+  //   dsn: env.reflectionsSentryDSN()
+  // });
+
+  const dsn = 'https://262540e1e48c472396769becb58ae9ce@o204294.ingest.sentry.io/1327145';
+
   Sentry.init({
-    dsn: env.reflectionsSentryDSN()
+    dsn: dsn
   });
 }
 
