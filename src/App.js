@@ -13,10 +13,13 @@ import MapForm from "./components/mapForm";
 import HotSpotsEditor from "./components/hotSpotsEditor";
 import HotSpotForm from "./components/hotSpotForm";
 import NotFound from "./components/notFound";
+import localStorageService from "./services/localStorageService";
 import "./App.css";
 
 class App extends Component {
   render() {
+    localStorageService.setCurrentNovelFromHref(window.location.href);
+
     return (
       <React.Fragment>
         <ToastContainer />
@@ -28,13 +31,21 @@ class App extends Component {
             <Route path="/images" component={Images} />
             <Route path="/about" component={About} />
             <Route path="/logout" component={Logout} />
-            <Route path="/mapform/:id" component={MapForm} />
-            <Route path="/hotspotseditor/:id" component={HotSpotsEditor} />
+
+            <Route path="/:novelId/maps/:mapName" component={Maps} />
+            <Route path="/:novelId/maps" component={Maps} />
+            <Route path="/:novelId/images" component={Images} />
+            <Route path="/:novelId/about" component={About} />
+            <Route path="/:novelId/mapform/:id" component={MapForm} />
+            <Route path="/:novelId/hotspotseditor/:id" component={HotSpotsEditor} />
             <Route
-              path="/hotspotform/:mapId/hotSpot/:hotSpotId"
+              path="/:novelId/hotspotform/:mapId/hotSpot/:hotSpotId"
               component={HotSpotForm}
             />
+            <Route path="/:novelId/logout" component={Logout} />
+
             <Route path="/notfound" component={NotFound} />
+            <Route path="/:novelId" component={Home} exact />
             <Route path="/" component={Home} exact />
             <Redirect to="/notfound" />
           </Switch>

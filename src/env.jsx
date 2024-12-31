@@ -6,4 +6,5 @@ function reflectionsSentryDSN() {
   return process.env.REACT_SENTRY_DSN;
 }
 
-export default { reflectionsApiUrl, reflectionsSentryDSN };
+const env = { reflectionsApiUrl, reflectionsSentryDSN };
+export default env;

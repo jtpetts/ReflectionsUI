@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import MapsService from "../services/mapsService";
 import AuthService from "../services/authService";
+import NovelService from "../services/novelService";
 import localStorageService from "../services/localStorageService";
 import imageBackArrow from "../images/arrow back.png";
 import AnnotatedMap from "./annotatedMap";
@@ -37,18 +38,23 @@ class Maps extends Component {
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions);
 
-    const maps = await MapsService.getMaps();
+    const novelId = localStorageService.getCurrentNovel();
+    const maps = await MapsService.getMapsByNovelId(novelId);
     this.setState({ maps });
 
     await this.initMap(maps, this.props.match.params.mapName);
   }
 
+  // they recommend going to this getDerivedStateFromProps
   async UNSAFE_componentWillReceiveProps(nextProps) {
     await this.initMap(this.state.maps, nextProps.match.params.mapName);
   }
 
   initMap = (maps, mapName) => {
-    if (!mapName) mapName = Config.topMap;
+    if (!mapName) {
+      const novelId = localStorageService.getCurrentNovel();
+      mapName = NovelService.getTopMap(novelId);
+    }
 
     const map = maps.find(m => m.name === mapName);
     const breadCrumbs = this.locateBreadcrumbs(maps, map);
@@ -86,15 +92,15 @@ class Maps extends Component {
 
   handleBreadCrumb = breadCrumb => {
     localStorageService.countZoomOutClick();
-    this.props.history.push(`/maps/${breadCrumb}`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/maps/${breadCrumb}`);
   };
 
   handleEdit = () => {
-    this.props.history.push(`/mapform/${this.state.map._id}`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/mapform/${this.state.map._id}`);
   };
 
   handleZoomClick = hotSpot => {
-    this.props.history.push(`/maps/${hotSpot.zoomName}`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/maps/${hotSpot.zoomName}`);
   };
 
   handleAnnotatorClick = () => {

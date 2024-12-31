@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/browser";
-import env from "../env";
+//import env from "../env";
 
 export function init() {
   // Sentry.init({

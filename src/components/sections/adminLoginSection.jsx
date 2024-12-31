@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LoginForm from "./../loginForm";
+import localStorageService from "../../services/localStorageService";
 
 class adminLoginSection extends Component {
   state = { showAdminLogin: false };
@@ -9,7 +10,7 @@ class adminLoginSection extends Component {
   };
 
   handleSuccessfulLogin = () => {
-    window.location = "/maps";
+    window.location = `/${localStorageService.getCurrentNovel()}/maps`;
   };
 
   render() {

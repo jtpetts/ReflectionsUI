@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import AuthService from "../../services/authService";
+import localStorageService from "../../services/localStorageService";
 
 class GuestLoginSection extends Component {
   handleGuestLogin = async () => {
     await AuthService.login("guest@guest.com", "guest");
-    window.location = "/maps";
+    window.location = `/${localStorageService.getCurrentNovel()}/maps`;
   };
   render() {
     return (
