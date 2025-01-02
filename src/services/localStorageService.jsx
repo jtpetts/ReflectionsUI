@@ -78,7 +78,7 @@ export function countFoundMaps() {
 const novelKey = "novelKey";
 
 function setCurrentNovel(novelId) {
-  const cleanedNovelId = NovelService.identifyNovelIdFromHref(novelId);
+  const cleanedNovelId = NovelService.identifyNovelIdFromHref(novelId || "");
   localStorage.setItem(novelKey, cleanedNovelId);
 }
 
