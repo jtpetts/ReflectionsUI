@@ -3,6 +3,7 @@ import Joi from "joi-browser";
 import queryString from "query-string";
 import Form from "./common/form";
 import MapsService from "../services/mapsService";
+import localStorageService from "../services/localStorageService";
 
 class MapForm extends Form {
   state = {
@@ -33,7 +34,6 @@ class MapForm extends Form {
           imageFilename: map.imageFilename
         });
       } catch (ex) {
-        // redirect to /not-found
         this.props.history.replace("/notfound");
       }
     }
@@ -59,9 +59,12 @@ class MapForm extends Form {
     // get the fields and submit to the service, will need auth first.
     // where to go after save? to hot spot form I should think.
 
+    const novelId = localStorageService.getCurrentNovel();
+
     const map = {
       ...this.state.originalMap,
       name: this.state.data.name,
+      novelId: novelId,
       description: this.state.data.description,
       imageFilename: this.state.imageFilename
     };
@@ -69,7 +72,7 @@ class MapForm extends Form {
     try {
       const updatedMap = await MapsService.save(map);
       if (updatedMap)
-        this.props.history.push(`/hotspotseditor/${updatedMap._id}`);
+        this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${updatedMap._id}`);
     } catch (ex) {
       const errorMessage = ex.response.data;
       const errors = { ...this.state.errors };
@@ -80,7 +83,7 @@ class MapForm extends Form {
 
   handleEditHotSpots = () => {
     const id = this.props.match.params.id;
-    this.props.history.push(`/hotspotseditor/${id}`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${id}`);
   };
 
   render() {

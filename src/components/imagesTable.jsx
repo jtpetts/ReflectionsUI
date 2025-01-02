@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Table from "./common/table";
 import { Link } from "react-router-dom";
+import localStorageService from "../services/localStorageService";
 //import AuthService from "./../services/authService";
 
 class ImagesTable extends Component {
@@ -13,8 +14,8 @@ class ImagesTable extends Component {
           <Link
             to={
               image.isImageOnly
-                ? `/mapForm/New?imageFilename=${image.imageFilename}`
-                : `/mapForm/${image._id}`
+                ? `/${localStorageService.getCurrentNovel()}/mapForm/New?imageFilename=${image.imageFilename}`
+                : `/${localStorageService.getCurrentNovel()}/mapForm/${image._id}`
             }
           >
             {image.isImageOnly ? "Create Map Entry" : image.name}

@@ -3,6 +3,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import MapsService from "../services/mapsService";
 import HotSpotsService from "../services/hotSpotsService";
+import localStorageService from "../services/localStorageService";
 import Images from "../services/imageService";
 import HotSpotsTable from "./hotSpotsTable";
 import Paginator from "./common/paginator";
@@ -63,7 +64,6 @@ class HotSpotsEditor extends Component {
       // circle
       this.setState({ activePage: 0 });
     } catch (ex) {
-      console.log("ex", ex);
       this.props.history.replace("/notfound");
     }
   };
@@ -139,15 +139,15 @@ class HotSpotsEditor extends Component {
   };
 
   handleZoomDownClick = hotSpot => {
-    this.props.history.push(`/hotspotseditor/${hotSpot.zoomId}`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${hotSpot.zoomId}`);
   };
 
   handleNewHotSpot = () => {
-    this.props.history.push(`/hotSpotForm/${this.state.map._id}/hotSpot/New`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotSpotForm/${this.state.map._id}/hotSpot/New`);
   };
 
   handleZoomUp = async () => {
-    this.props.history.push(`/hotspotseditor/${this.state.zoomUpId}`);
+    this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${this.state.zoomUpId}`);
   };
 
   handleCloseDeleteModal = () => {

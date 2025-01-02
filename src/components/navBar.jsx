@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
 import AuthService from "../services/authService";
+import localStorageService from "../services/localStorageService";
+import NovelService from "../services/novelService";
 
 class NavBar extends Component {
   state = { isCollapsed: true };
@@ -22,11 +24,13 @@ class NavBar extends Component {
       : "navbar-toggler navbar-toggler-right";
 
     const user = AuthService.getCurrentUser();
+    const novelId = localStorageService.getCurrentNovel();
+    const navBarName = NovelService.getNavBarName(novelId);
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link className="navbar-brand" to="/">
-          Reflections
+        <Link className="navbar-brand" to={`/${novelId}/`}>
+          {navBarName}
         </Link>
         <button
           className={classToggleButton}
@@ -45,14 +49,14 @@ class NavBar extends Component {
             <NavLink
               className="nav-item nav-link"
               exact
-              to="/"
+              to={`/${novelId}/`}
               onClick={this.collapse}
             >
               Home
             </NavLink>
             <NavLink
               className="nav-item nav-link"
-              to="/maps"
+              to={`/${novelId}/maps`}
               onClick={this.collapse}
             >
               Maps
@@ -60,7 +64,7 @@ class NavBar extends Component {
             {user && (
               <NavLink
                 className="nav-item nav-link"
-                to="/images"
+                to={`/${novelId}/images`}
                 onClick={this.collapse}
               >
                 Images
@@ -68,7 +72,7 @@ class NavBar extends Component {
             )}
             <NavLink
               className="nav-item nav-link"
-              to="/about"
+              to={`/${novelId}/about`}
               onClick={this.collapse}
             >
               About
@@ -77,7 +81,7 @@ class NavBar extends Component {
               <React.Fragment>
                 <NavLink
                   className="nav-item nav-link"
-                  to="/logout"
+                  to={`/${novelId}/logout`}
                   onClick={this.collapse}
                 >
                   Logout

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Table from "./common/table";
 import { Link } from "react-router-dom";
+import localStorageService from "../services/localStorageService";
 //import AuthService from "./../services/authService";
 
 class HotSpotsTable extends Component {
@@ -11,7 +12,7 @@ class HotSpotsTable extends Component {
         content: hotSpot =>
           this.props.mapId ? (
             <Link
-              to={`/hotSpotForm/${this.props.mapId}/hotSpot/${hotSpot._id}`}
+              to={`/${localStorageService.getCurrentNovel()}/hotSpotForm/${this.props.mapId}/hotSpot/${hotSpot._id}`}
             >
               {hotSpot.name}
             </Link>

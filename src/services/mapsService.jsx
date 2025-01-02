@@ -17,6 +17,10 @@ export async function getMaps() {
   return (await httpService.get(`${getApiUrl()}`)).data;
 }
 
+export async function getMapsByNovelId(novelId) {
+  return (await httpService.get(`${getApiUrl()}/novel/${novelId}`)).data;
+}
+
 export async function save(map) {
   if (map._id) return (await httpService.put(getApiUrl(), map)).data;
   else return (await httpService.post(getApiUrl(), map)).data;
@@ -26,5 +30,5 @@ export async function deleteMap(id) {
   await httpService.delete(`${getApiUrl()}${id}`);
 }
 
-const mapsService = { getMap, getMaps, save, deleteMap, getMapByName };
+const mapsService = { getMap, getMaps, getMapsByNovelId, save, deleteMap, getMapByName };
 export default mapsService;

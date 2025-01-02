@@ -4,6 +4,7 @@ import _ from "lodash";
 import Form from "./common/form";
 import HotSpotsService from "../services/hotSpotsService";
 import MapsService from "../services/mapsService";
+import localStorageService from "../services/localStorageService";
 
 class HotSpotForm extends Form {
   state = {
@@ -79,7 +80,7 @@ class HotSpotForm extends Form {
     try {
       await HotSpotsService.save(mapId, hotSpot);
 
-      this.props.history.push(`/hotspotseditor/${mapId}`);
+      this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${mapId}`);
     } catch (ex) {
       const errorMessage = ex.response.data;
       const isZoomError = errorMessage.search("zoom") >= 0;
@@ -91,7 +92,7 @@ class HotSpotForm extends Form {
   };
 
   getZoomableMaps = async () => {
-    const maps = await MapsService.getMaps();
+    const maps = await MapsService.getMapsByNovelId(localStorageService.getCurrentNovel());
     let zoomNames = maps.map(m => ({ name: m.name, id: m._id }));
 
     // exclude the current map's name
@@ -127,7 +128,7 @@ class HotSpotForm extends Form {
             className="btn btn-primary buttonSpacing"
             onClick={() =>
               this.props.history.replace(
-                `/hotspotseditor/${this.props.match.params.mapId}`
+                `/${localStorageService.getCurrentNovel()}/hotspotseditor/${this.props.match.params.mapId}`
               )
             }
           >

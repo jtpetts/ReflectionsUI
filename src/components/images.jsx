@@ -6,6 +6,7 @@ import ImagesService from "../services/imageService";
 import ImagesTable from "./imagesTable";
 import Paginator from "./common/paginator";
 import AreYouSureModal from "./common/areYouSureModal";
+import localStorageService from "../services/localStorageService";
 
 class Images extends Component {
   state = {
@@ -27,7 +28,8 @@ class Images extends Component {
   }
 
   blendImagesWithMapDb = async () => {
-    const rawMaps = await MapsService.getMaps();
+    const novelId = localStorageService.getCurrentNovel();
+    const rawMaps = await MapsService.getMapsByNovelId(novelId);
 
     const maps = rawMaps.map(m => ({
       name: m.name,
@@ -37,7 +39,7 @@ class Images extends Component {
       isImageOnly: false
     }));
 
-    const images = ImagesService.getImages();
+    const images = ImagesService.getImagesByNovelId(novelId);
     const blended = maps.concat(
       images
         .filter(i => !maps.find(m => m.imageFilename === i.imageFilename))
@@ -56,9 +58,9 @@ class Images extends Component {
   handleEdit = image => {
     if (image._id === image.imageFilename)
       this.props.history.push(
-        `/mapForm/New?imageFilename=${image.imageFilename}`
+        `/${localStorageService.getCurrentNovel()}/mapForm/New?imageFilename=${image.imageFilename}`
       );
-    else this.props.history.push(`/mapForm/${image._id}`);
+    else this.props.history.push(`/${localStorageService.getCurrentNovel()}/mapForm/${image._id}`);
   };
 
   handleDeleteWarning = image => {

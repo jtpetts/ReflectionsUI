@@ -1,3 +1,5 @@
+import NovelService from "./novelService";
+
 const details = "refShowDetails";
 const zoomIn = "refShowZoomIn";
 const zoomOut = "refShowZoomOut";
@@ -45,27 +47,44 @@ export function countZoomOutClick() {
   increment(zoomOut);
 }
 
-const mapKey = "mapKey";
+function getMapIdsKey() {
+  const novelId = getCurrentNovel();
 
-function getMapsArray() {
-  var foundMaps = localStorage.getItem(mapKey);
+  return `mapKey_${novelId}`;
+}
+
+function getMapIdsArray() {
+  var foundMaps = localStorage.getItem(getMapIdsKey());
   if (!foundMaps) foundMaps = "";
   return foundMaps.split(",");
 }
 
 export function foundMap(mapId) {
-  const maps = getMapsArray();
-  const map = maps.find(m => m === mapId);
+  const mapIds = getMapIdsArray();
+  const map = mapIds.find(m => m === mapId);
 
   if (!map) {
-    maps.push(mapId);
+    mapIds.push(mapId);
     // remove any blank entries and then convert to CSV
-    localStorage.setItem(mapKey, maps.filter(m => m).join(","));
+    localStorage.setItem(getMapIdsKey(), mapIds.filter(m => m).join(","));
   }
 }
 
 export function countFoundMaps() {
-  return getMapsArray().length;
+  return getMapIdsArray().length;
+}
+
+// current novel
+const novelKey = "novelKey";
+
+function setCurrentNovelFromHref(href) {
+  const novelId = NovelService.identifyNovelIdFromHref(href);
+  localStorage.setItem(novelKey, novelId);
+}
+
+function getCurrentNovel() {
+  const novelId = localStorage.getItem(novelKey);
+  return novelId;
 }
 
 const localStorageService = {
@@ -76,6 +95,8 @@ const localStorageService = {
   isZoomOutActive,
   countZoomOutClick,
   foundMap,
-  countFoundMaps
+  countFoundMaps,
+  setCurrentNovelFromHref,
+  getCurrentNovel
 };
 export default localStorageService;
