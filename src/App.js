@@ -13,7 +13,6 @@ import MapForm from "./components/mapForm";
 import HotSpotsEditor from "./components/hotSpotsEditor";
 import HotSpotForm from "./components/hotSpotForm";
 import NotFound from "./components/notFound";
-import localStorageService from "./services/localStorageService";
 import "./App.css";
 
 class App extends Component {

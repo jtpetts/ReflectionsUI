@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../services/authService";
+import localStorageService from "../services/localStorageService";
 
 class Logout extends Component {
   handleLogout = async () => {
