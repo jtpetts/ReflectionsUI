@@ -14,6 +14,8 @@ class MapForm extends Form {
   };
 
   async componentDidMount() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
+
     // was ID provided? If so, acquire. If it is "new", then create a new one.
     const id = this.props.match.params.id;
     if (id === "New") {

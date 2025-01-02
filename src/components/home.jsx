@@ -6,6 +6,7 @@ import novelService from "../services/novelService";
 
 class Home extends Component {
   render() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
     const novelId = localStorageService.getCurrentNovel();
     const showMeadow = novelService.getHomeSecondImage(novelId) != null;
 

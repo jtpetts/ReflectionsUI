@@ -8,6 +8,8 @@ class Logout extends Component {
   };
 
   render() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
+
     return (
       <div>
         <p>Thank you for your visit!</p>
