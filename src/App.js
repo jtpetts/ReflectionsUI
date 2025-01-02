@@ -18,8 +18,10 @@ import "./App.css";
 
 class App extends Component {
   render() {
-    localStorageService.setCurrentNovelFromHref(window.location.href);
-    console.log("app.js.window.location.href", { href: window.location.href });
+    // localStorageService.setCurrentNovelFromHref(window.location.href);
+    localStorageService.setCurrentNovelFromHref(window.location.pathname);
+    console.log("app.js.window.location.href", { href: window.location.href, pathname: window.location.pathname });
+    console.log("app.js.window.location", { href: window.location });
 
     return (
       <React.Fragment>
