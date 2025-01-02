@@ -22,6 +22,9 @@ class App extends Component {
     localStorageService.setCurrentNovelFromHref(window.location.pathname);
     console.log("app.js.window.location.href", { href: window.location.href, pathname: window.location.pathname });
     console.log("app.js.window.location", { href: window.location });
+    console.log("app.js.window", { href: window });
+
+// maybe window.navigation.currentEntry.url  // maybe
 
     return (
       <React.Fragment>
