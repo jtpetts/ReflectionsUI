@@ -30,6 +30,8 @@ class HotSpotsEditor extends Component {
   };
 
   async componentDidMount() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
+
     // download all of the maps the first time in
     const maps = await MapsService.getMaps();
     this.setState({ maps });

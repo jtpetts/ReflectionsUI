@@ -20,6 +20,8 @@ class Images extends Component {
   };
 
   async componentDidMount() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
+
     try {
       await this.blendImagesWithMapDb();
     } catch (ex) {

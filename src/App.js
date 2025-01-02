@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,18 +18,10 @@ import "./App.css";
 
 class App extends Component {
   render() {
-    // localStorageService.setCurrentNovelFromHref(window.location.href);
-    localStorageService.setCurrentNovelFromHref(window.location.pathname);
-    console.log("app.js.window.location.href", { href: window.location.href, pathname: window.location.pathname });
-    console.log("app.js.window.location", { href: window.location });
-    console.log("app.js.window", { href: window });
-
-// maybe window.navigation.currentEntry.url  // maybe
-
     return (
       <React.Fragment>
         <ToastContainer />
-        <NavBar />
+        <NavBar {...this.props}/>
         <main className="fullHeight container" style={{ maxWidth: "none" }}>
           <Switch>
             <Route path="/maps/:mapName" component={Maps} />
@@ -61,4 +53,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter( App );

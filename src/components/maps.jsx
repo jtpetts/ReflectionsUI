@@ -38,6 +38,7 @@ class Maps extends Component {
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions);
 
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
     const novelId = localStorageService.getCurrentNovel();
     const maps = await MapsService.getMapsByNovelId(novelId);
     this.setState({ maps });

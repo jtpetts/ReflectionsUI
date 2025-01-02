@@ -11,7 +11,14 @@ class NavBar extends Component {
     this.setState({ isCollapsed: !this.state.isCollapsed });
   };
 
-  collapse = () => {
+  affixNovel = (e, path) => {
+    // navigate
+    const novelId = localStorageService.getCurrentNovel();
+    const destination = `/${novelId}/${path}`;
+    this.props.history.push(destination);
+    e.preventDefault();
+
+    // ensure the menu "button" is collapsed
     this.setState({ isCollapsed: true });
   };
 
@@ -50,14 +57,14 @@ class NavBar extends Component {
               className="nav-item nav-link"
               exact
               to={`/${novelId}/`}
-              onClick={this.collapse}
+              onClick={(e) => this.affixNovel(e, "")}
             >
               Home
             </NavLink>
             <NavLink
               className="nav-item nav-link"
               to={`/${novelId}/maps`}
-              onClick={this.collapse}
+              onClick={(e) => this.affixNovel(e, "maps")}
             >
               Maps
             </NavLink>
@@ -65,7 +72,7 @@ class NavBar extends Component {
               <NavLink
                 className="nav-item nav-link"
                 to={`/${novelId}/images`}
-                onClick={this.collapse}
+                onClick={(e) => this.affixNovel(e, "images")}
               >
                 Images
               </NavLink>
@@ -73,7 +80,7 @@ class NavBar extends Component {
             <NavLink
               className="nav-item nav-link"
               to={`/${novelId}/about`}
-              onClick={this.collapse}
+              onClick={(e) => this.affixNovel(e, "about")}
             >
               About
             </NavLink>
@@ -82,7 +89,7 @@ class NavBar extends Component {
                 <NavLink
                   className="nav-item nav-link"
                   to={`/${novelId}/logout`}
-                  onClick={this.collapse}
+                  onClick={(e) => this.affixNovel(e, "logout")}
                 >
                   Logout
                 </NavLink>

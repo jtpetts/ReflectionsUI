@@ -77,6 +77,11 @@ export function countFoundMaps() {
 // current novel
 const novelKey = "novelKey";
 
+function setCurrentNovel(novelId) {
+  const cleanedNovelId = NovelService.identifyNovelIdFromHref(novelId);
+  localStorage.setItem(novelKey, cleanedNovelId);
+}
+
 function setCurrentNovelFromHref(href) {
   const novelId = NovelService.identifyNovelIdFromHref(href);
   localStorage.setItem(novelKey, novelId);
@@ -96,6 +101,7 @@ const localStorageService = {
   countZoomOutClick,
   foundMap,
   countFoundMaps,
+  setCurrentNovel,
   setCurrentNovelFromHref,
   getCurrentNovel
 };
