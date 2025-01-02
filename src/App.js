@@ -19,6 +19,7 @@ import "./App.css";
 class App extends Component {
   render() {
     localStorageService.setCurrentNovelFromHref(window.location.href);
+    console.log("app.js.window.location.href", { href: window.location.href });
 
     return (
       <React.Fragment>
