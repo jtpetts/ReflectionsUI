@@ -1,7 +1,6 @@
-import SunsetBackground from "../images/Sunset.jpg";
-import MeadowBackground from "../images/Meadow.jpg";
-import AfterlifeHomeBackgroundRed from "../images/afterlife/HomeBackgroundRed.jpg";
-import AfterlifeHomeBackgroundYellow from "../images/afterlife/HomeBackgroundYellow.jpg";
+import ReflectionsHomeBackgroundSunset from "../images/reflections/HomeBackgroundSunset.jpg";
+import ReflectionsMeadowBackground from "../images/reflections/Meadow.jpg";
+import AfterlifeHomeBackgroundSunset from "../images/afterlife/HomeBackgroundSunset.jpg";
 
 const reflectionsNovel = {
     novelId: 'reflections',
@@ -15,10 +14,10 @@ const reflectionsNovel = {
         "That is, until nightmarish fey kidnap a neighbor child. One she babysat often. Now, pursued by the same fey, she enters a dangerous world where faeries fear knife wielding creatures that can command the very earth she walks upon.",
         "She must avoid their curses, their attempts to steal her person and her memories all to rescue a small child that no one, not even her parents, knows is missing."
     ],
-    homeBackgroundImage: SunsetBackground,
+    homeBackgroundImage: ReflectionsHomeBackgroundSunset,
     homeSecondTitle: "The Meadow",
     homeSecondDescription: "Inspiration for the meadow in Eiserune.",
-    homeSecondImage: MeadowBackground
+    homeSecondImage: ReflectionsMeadowBackground
 }
 
 const afterlifeNovel = {
@@ -36,7 +35,7 @@ const afterlifeNovel = {
         "Resuming their former lives might be the harder than reining in the Echolords. Armand’s twin brother is on the edge of a rage-fueled breakdown, while Haki’s adopted sister is a bitter orphan, twice over.",
         "Can they bring about the end of the war without betraying their loved ones?"
     ],
-    homeBackgroundImage: AfterlifeHomeBackgroundRed,
+    homeBackgroundImage: AfterlifeHomeBackgroundSunset,
     homeSecondTitle: "",
     homeSecondDescription: "",
     homeSecondImage: null

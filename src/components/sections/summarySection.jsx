@@ -18,7 +18,7 @@ class SummarySection extends Component {
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="fullSection centeredSectionText">
-          <center>
+          <center className="imgFade">
             <h2>{title}</h2>
             <font style={{ fontSize: "100%" }}>
               {parse(blurbHtml)}
