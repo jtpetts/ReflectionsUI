@@ -58,8 +58,11 @@ export function sanitizeNovelId(novelId) {
 }
 
 function identifyNovelIdFromHref(href) {
+    console.log("novelservice.jsx.identifyNovelIdFromHref", { href: href });
+    console.log("novelservice.jsx.identifyNovelIdFromHref_2", { href: href,
+        hrefToString: href.toString(), hrefToStringToLowerCase: href.toString().toLowerCase() });
 
-    const lowerCaseHref = href.toLowerCase();
+    const lowerCaseHref = href.toString().toLowerCase();
     const novel = novels.find((novel) => lowerCaseHref.includes(novel.novelId));
 
     if (novel) return novel.novelId;
