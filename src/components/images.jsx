@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { Component } from "react";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import MapsService from "../services/mapsService";
@@ -9,35 +8,32 @@ import Paginator from "./common/paginator";
 import AreYouSureModal from "./common/areYouSureModal";
 import localStorageService from "../services/localStorageService";
 
-function Images() {
-  const PAGE_SIZE = 8;
-  const [activePage, setActivePage] = useState(0);
-  const [sortColumn, setSortColumn] = useState({ path: "name", order: "asc" });
-  const [images, setImages] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteModalMessage, setDeleteModalMessage] = useState("");
-  const [imageToDelete, setImageToDelete] = useState(null);
-  const params = useParams();
-  const navigate = useNavigate();
+class Images extends Component {
+  state = {
+    activePage: 0,
+    pageSize: 8,
+    sortColumn: { path: "name", order: "asc" },
+    images: [],
+    showDeleteModal: false,
+    deleteModalMessage: "",
+    imageToDelete: null
+  };
 
-  // initialize component
-  useEffect(() => {
-    localStorageService.setCurrentNovel(params.novelId);
+  async componentDidMount() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
 
     try {
-      const novelId = localStorageService.getCurrentNovel();
-
-      MapsService.getMapsByNovelId(novelId)
-        .then(mapsList => {
-          blendImagesWithMapDb(mapsList, novelId);
-        });
+      await this.blendImagesWithMapDb();
     } catch (ex) {
-      navigate("/notfound", { replace: true });
+      this.props.history.replace("/notfound");
     }
-  }, []);
+  }
 
-  const blendImagesWithMapDb = (mapsList, novelId) => {
-    const maps = mapsList.map(m => ({
+  blendImagesWithMapDb = async () => {
+    const novelId = localStorageService.getCurrentNovel();
+    const rawMaps = await MapsService.getMapsByNovelId(novelId);
+
+    const maps = rawMaps.map(m => ({
       name: m.name,
       imageFilename: m.imageFilename,
       _id: m._id,
@@ -46,7 +42,7 @@ function Images() {
     }));
 
     const images = ImagesService.getImagesByNovelId(novelId);
-    const blendedMapsImages = maps.concat(
+    const blended = maps.concat(
       images
         .filter(i => !maps.find(m => m.imageFilename === i.imageFilename))
         .map(i => ({
@@ -58,119 +54,125 @@ function Images() {
         }))
     );
 
-    setImages(blendedMapsImages);
+    this.setState({ images: blended });
   };
 
-  const handleEdit = image => {
+  handleEdit = image => {
     if (image._id === image.imageFilename)
-      navigate(`/${localStorageService.getCurrentNovel()}/mapForm/New?imageFilename=${image.imageFilename}`);
-    else
-      navigate(`/${localStorageService.getCurrentNovel()}/mapForm/${image._id}`);
+      this.props.history.push(
+        `/${localStorageService.getCurrentNovel()}/mapForm/New?imageFilename=${image.imageFilename}`
+      );
+    else this.props.history.push(`/${localStorageService.getCurrentNovel()}/mapForm/${image._id}`);
   };
 
-  const handleDeleteWarning = image => {
-    setShowDeleteModal(true);
-    setDeleteModalMessage(`Are you sure you want to delete the map and hotspot records for ${image.name}`);
-    setImageToDelete(image);
+  handleDeleteWarning = image => {
+    this.setState({
+      showDeleteModal: true,
+      deleteModalMessage: `Are you sure you want to delete the map and hotspot records for ${
+        image.name
+      }`,
+      imageToDelete: image
+    });
   };
 
-  const handleDelete = async () => {
-    const image = imageToDelete;
+  handleDelete = async () => {
+    const image = this.state.imageToDelete;
 
     if (image._id) {
-      const originalImages = images;
+      const originalImages = this.state.images;
 
       try {
-        setShowDeleteModal(false);
+        this.setState({ showDeleteModal: false });
         await MapsService.deleteMap(image._id);
 
         // sorting out the blended images with the maps is more trouble than its worth,
         // especially considering how rare delete will be. I've chosen to refresh from
         // database.
-        const novelId = localStorageService.getCurrentNovel();
-        const mapsList = await MapsService.getMapsByNovelId(novelId);
-        blendImagesWithMapDb(mapsList, novelId);
+        await this.blendImagesWithMapDb();
       } catch (ex) {
         if (ex.response)
           if (ex.response.status >= 400 && ex.response.status < 500)
-            toast.error("Access denied!");
+            toast.error(ex.response.data);
 
-        setImages(originalImages);
+        this.setState({ images: originalImages });
       }
     }
   };
 
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
+  handleCloseDeleteModal = () => {
+    this.setState({ showDeleteModal: false });
   };
 
-  const handlePageChange = newActivePage => {
-    setActivePage(newActivePage);
+  handlePageChange = activePage => {
+    this.setState({ activePage });
   };
 
-  const handleSort = newSortColumn => {
-    setSortColumn(newSortColumn);
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
   };
 
-  const getPagedData = () => {
+  getPagedData = () => {
     // filters, pages, and sorts the hot spots
-    if (!images) return { itemCount: 0, pagedImages: [] };
+    if (!this.state.images) return { itemCount: 0, images: [] };
 
     const sortedImages = _.orderBy(
-      images,
-      sortColumn.path,
-      sortColumn.order
+      this.state.images,
+      this.state.sortColumn.path,
+      this.state.sortColumn.order
     );
 
-    const start = activePage * PAGE_SIZE;
+    const start = this.state.activePage * this.state.pageSize;
 
     const pagedImages = _.slice(
       sortedImages,
       start,
-      start + PAGE_SIZE
+      start + this.state.pageSize
     );
 
     return {
-      itemCount: images.length,
-      pagedImages
+      itemCount: this.state.images.length,
+      images: pagedImages
     };
   };
 
-  const { itemCount, pagedImages } = getPagedData();
+  render() {
+    const { itemCount, images } = this.getPagedData();
 
-  return (
-    <React.Fragment>
-      <div className="row">
-        <div className="col">
-          <h2>Images</h2>
+    return (
+      <React.Fragment>
+        <div className="row">
+          <div className="col">
+            <h2>Images</h2>
+          </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <ImagesTable
-            images={pagedImages}
-            onDelete={handleDeleteWarning}
-            onEdit={handleEdit}
-            onSort={handleSort}
-            sortColumn={sortColumn}
-          />
-          <Paginator
-            itemCount={itemCount}
-            pageSize={PAGE_SIZE}
-            activePage={activePage}
-            onPageChange={handlePageChange}
-          />
+        <div className="row">
+          <div className="col">
+            <ImagesTable
+              images={images}
+              onLike={this.handleLike}
+              onDelete={this.handleDeleteWarning}
+              onEdit={this.handleEdit}
+              onSort={this.handleSort}
+              sortColumn={this.state.sortColumn}
+            />
+            <Paginator
+              itemCount={itemCount}
+              pageSize={this.state.pageSize}
+              activePage={this.state.activePage}
+              onPageChange={this.handlePageChange}
+            />
+          </div>
         </div>
-      </div>
-      <AreYouSureModal
-        open={showDeleteModal}
-        onClose={handleCloseDeleteModal}
-        onTrigger={handleDelete}
-        triggerLabel="Delete"
-        modalMessage={deleteModalMessage}
-      />
-    </React.Fragment>
-  );
+        <AreYouSureModal
+          open={this.state.showDeleteModal}
+          onClose={this.handleCloseDeleteModal}
+          onTrigger={this.handleDelete}
+          triggerLabel="Delete"
+          modalMessage={this.state.deleteModalMessage}
+        />
+      </React.Fragment>
+    );
+  }
 }
 
 export default Images;

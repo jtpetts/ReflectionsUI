@@ -83,7 +83,7 @@ function setCurrentNovel(novelId) {
 }
 
 function setCurrentNovelFromHref(href) {
-  const novelId = NovelService.identifyNovelIdFromHref(href || "");
+  const novelId = NovelService.identifyNovelIdFromHref(href);
   localStorage.setItem(novelKey, novelId);
 }
 

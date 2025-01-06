@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { Component } from "react";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,38 +15,41 @@ import HotSpotForm from "./components/hotSpotForm";
 import NotFound from "./components/notFound";
 import "./App.css";
 
-function App() {
-  return (
-    <React.Fragment>
-      <ToastContainer />
-      <NavBar />
-      <main className="fullHeight container" style={{ maxWidth: "none" }}>
-        <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route path="/:novelId/*" element={<Home />} />
+class App extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <ToastContainer />
+        <NavBar {...this.props}/>
+        <main className="fullHeight container" style={{ maxWidth: "none" }}>
+          <Switch>
+            <Route path="/maps/:mapName" component={Maps} />
+            <Route path="/maps" component={Maps} />
+            <Route path="/images" component={Images} />
+            <Route path="/about" component={About} />
+            <Route path="/logout" component={Logout} />
 
-          <Route path="/maps/:mapName" element={<Maps />} />
-          <Route path="/maps" element={<Maps />} />
-          <Route path="/images" element={<Images />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/logout" element={<Logout />} />
+            <Route path="/:novelId/maps/:mapName" component={Maps} />
+            <Route path="/:novelId/maps" component={Maps} />
+            <Route path="/:novelId/images" component={Images} />
+            <Route path="/:novelId/about" component={About} />
+            <Route path="/:novelId/mapform/:id" component={MapForm} />
+            <Route path="/:novelId/hotspotseditor/:id" component={HotSpotsEditor} />
+            <Route
+              path="/:novelId/hotspotform/:mapId/hotSpot/:hotSpotId"
+              component={HotSpotForm}
+            />
+            <Route path="/:novelId/logout" component={Logout} />
 
-          <Route path="/:novelId/maps/:mapName" element={<Maps />} />
-          <Route path="/:novelId/maps" element={<Maps />} />
-          <Route path="/:novelId/images" element={<Images />} />
-          <Route path="/:novelId/about" element={<About />} />
-          <Route path="/:novelId/mapform/:id" element={<MapForm />} />
-          <Route path="/:novelId/hotspotseditor/:id" element={<HotSpotsEditor />} />
-          <Route
-            path="/:novelId/hotspotform/:mapId/hotSpot/:hotSpotId"
-            element={<HotSpotForm />}
-          />
-          <Route path="/:novelId/logout" element={<Logout />} />
-          <Route path="/notfound" element={<NotFound/>} />
-        </Routes>
-      </main>
-    </React.Fragment>
-  );
+            <Route path="/notfound" component={NotFound} />
+            <Route path="/:novelId" component={Home} exact />
+            <Route path="/" component={Home} exact />
+            <Redirect to="/notfound" />
+          </Switch>
+        </main>
+      </React.Fragment>
+    );
+  }
 }
 
-export default App;
+export default withRouter( App );

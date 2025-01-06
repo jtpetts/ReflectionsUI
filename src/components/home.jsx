@@ -1,23 +1,22 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { Component } from "react";
 import SummarySection from "./sections/summarySection";
 import MeadowSection from "./sections/meadowSection";
 import localStorageService from "../services/localStorageService";
 import novelService from "../services/novelService";
 
-function Home() {
-  const params = useParams();
+class Home extends Component {
+  render() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
+    const novelId = localStorageService.getCurrentNovel();
+    const showMeadow = novelService.getHomeSecondImage(novelId) != null;
 
-  localStorageService.setCurrentNovel(params.novelId);
-  const novelId = localStorageService.getCurrentNovel();
-  const showMeadow = novelService.getHomeSecondImage(novelId) != null;
-
-  return (
-    <React.Fragment>
-      <SummarySection />
-      {showMeadow && <MeadowSection />}
-    </React.Fragment>
-  );
+    return (
+      <React.Fragment>
+        <SummarySection />
+        {showMeadow && <MeadowSection />}
+      </React.Fragment>
+    );
+  }
 }
 
 export default Home;

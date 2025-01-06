@@ -1,27 +1,25 @@
-import React from "react";
+import React, { Component } from "react";
 import AuthService from "../services/authService";
 import localStorageService from "../services/localStorageService";
-import { useNavigate, useParams } from "react-router-dom";
 
-function Logout() {
-  const navigate = useNavigate();
-  const params = useParams();
-
-  const handleLogout = async () => {
+class Logout extends Component {
+  handleLogout = async () => {
     AuthService.logout();
-    navigate("/");
+    window.location = "/";
   };
 
-  localStorageService.setCurrentNovel(params.novelId);
+  render() {
+    localStorageService.setCurrentNovel(this.props.match.params.novelId);
 
-  return (
-    <div>
-      <p>Thank you for your visit!</p>
-      <button className="btn btn-primary" onClick={handleLogout}>
-        Logout
-      </button>
-    </div>
-  );
+    return (
+      <div>
+        <p>Thank you for your visit!</p>
+        <button className="btn btn-primary" onClick={this.handleLogout}>
+          Logout
+        </button>
+      </div>
+    );
+  }
 }
 
 export default Logout;

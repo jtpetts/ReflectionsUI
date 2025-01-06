@@ -1,31 +1,31 @@
-import React from "react";
+import React, { Component } from "react";
 import _ from "lodash";
 
-function TableBody(props) {
-  const renderCell = (item, column) => {
+class TableBody extends Component {
+  renderCell = (item, column) => {
     if (column.content) return column.content(item);
     else return _.get(item, column.path);
   };
 
-  const createCellKey = (item, column) => {
+  createCellKey = (item, column) => {
     return item._id + (column.path || column.key);
   };
 
-  const { data, columns } = props;
-
-  return (
-    <tbody>
-      {data.map(item => (
-        <tr key={item._id}>
-          {columns.map(column => (
-            <td key={createCellKey(item, column)}>
-              {renderCell(item, column)}
-            </td>
-          ))}
-        </tr>
-      ))}
-    </tbody>
-  );
+  render() {
+    return (
+      <tbody>
+        {this.props.data.map(item => (
+          <tr key={item._id}>
+            {this.props.columns.map(column => (
+              <td key={this.createCellKey(item, column)}>
+                {this.renderCell(item, column)}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    );
+  }
 }
 
 export default TableBody;

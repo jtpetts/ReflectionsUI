@@ -1,41 +1,41 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Component } from "react";
 import LoginForm from "./../loginForm";
 import localStorageService from "../../services/localStorageService";
 
-function AdminLoginSection() {
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const navigate = useNavigate();
+class adminLoginSection extends Component {
+  state = { showAdminLogin: false };
 
-  const handleAdminLogin = () => {
-    setShowAdminLogin(!showAdminLogin);
+  handleAdminLogin = () => {
+    this.setState({ showAdminLogin: !this.state.showAdminLogin });
   };
 
-  const handleSuccessfulLogin = () => {
-    navigate(`/${localStorageService.getCurrentNovel()}/maps`);
+  handleSuccessfulLogin = () => {
+    window.location = `/${localStorageService.getCurrentNovel()}/maps`;
   };
 
-  return (
-    <section
-      className="aboutSection"
-      style={{ backgroundColor: "lightblue" }}
-    >
-      <center>
-        <p>Admin login is for authorized individuals only.</p>
+  render() {
+    return (
+      <section
+        className="aboutSection"
+        style={{ backgroundColor: "lightblue" }}
+      >
+        <center>
+          <p>Admin login is for authorized individuals only.</p>
 
-        <button onClick={handleAdminLogin} className="btn btn-primary">
-          Admin Login
-        </button>
-      </center>
-      <div className="row justify-content-center">
-        <div className="col centeredSingleColumn">
-          {showAdminLogin && (
-            <LoginForm onSuccessfulLogin={handleSuccessfulLogin} />
-          )}
+          <button onClick={this.handleAdminLogin} className="btn btn-primary">
+            Admin Login
+          </button>
+        </center>
+        <div className="row justify-content-center">
+          <div className="col centeredSingleColumn">
+            {this.state.showAdminLogin && (
+              <LoginForm onSuccessfulLogin={this.handleSuccessfulLogin} />
+            )}
+          </div>
         </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  }
 }
 
-export default AdminLoginSection;
+export default adminLoginSection;
