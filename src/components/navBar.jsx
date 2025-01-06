@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import AuthService from "../services/authService";
 import localStorageService from "../services/localStorageService";
@@ -7,7 +7,6 @@ import NovelService from "../services/novelService";
 function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapsed = () => {
@@ -17,6 +16,14 @@ function NavBar() {
   const collapse = () => {
     setIsCollapsed(true);
   }
+
+
+  // whenever location changes
+  useEffect(() => {
+    console.log('navbar.jsx.location:', location);
+  }, [location]);
+
+
 
   const affixNovel = (e, path) => {
     // navigate
