@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import authService from "../services/authService";
-import Form from "./common/form";
+import { handleSubmit, renderSubmitButton, renderInput } from "./common/form";
 
-class LoginForm extends Form {
-  state = {
-    data: { username: "", password: "" },
-    errors: {}
-  };
+function LoginForm(props) {
+  const [data, setData] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState({});
 
-  schema = {
+  // update a single error, can also clear the value
+  const setError = (inputName, errorMessage) => {
+    if (errorMessage)
+      setErrors({ ...errors, [inputName]: errorMessage });
+    else {
+      let { [inputName]: _, ...newErrors } = errors; // clear the one error message
+      setErrors(newErrors);
+    }
+  }
+
+  // update a single item of data
+  const setDataItem = (inputName, inputValue) => {
+    setData({ ...data, [inputName]: inputValue });
+  }
+
+  const schema = {
     username: Joi.string()
       .email()
       .required()
@@ -23,37 +36,35 @@ class LoginForm extends Form {
       .label("Password")
   };
 
-  doSubmit = async () => {
+  const doSubmit = async (onSuccessfulLogin) => {
     // call server, login!
     try {
       await authService.login(
-        this.state.data.username,
-        this.state.data.password
+        data.username,
+        data.password
       );
 
-      this.props.onSuccessfulLogin();
+      onSuccessfulLogin();
     } catch (ex) {
       if (ex.response && ex.response.status >= 400) {
-        const errors = { ...this.state.errors };
-        errors.username = ex.response.data;
-        this.setState({ errors });
+        const newErrors = { ...errors };
+        newErrors.username = ex.response.data;
+        setErrors(newErrors);
 
-        toast.error(ex.response.data);
+        toast.error("Access denied!");
       }
     }
   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("Username", "username")}
-          {this.renderInput("Password", "password", "password")}
-          {this.renderSubmitButton("Login")}
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <form onSubmit={(e) => handleSubmit(e, () => doSubmit(props.onSuccessfulLogin), schema, data, setErrors)}>
+        {renderInput("Username", "username", schema, data, setDataItem, errors, setError)}
+        {renderInput("Password", "password", schema, data, setDataItem, errors, setError, "password")}
+        {renderSubmitButton("Login", schema, data)}
+      </form>
+    </div>
+  );
 }
 
 export default LoginForm;

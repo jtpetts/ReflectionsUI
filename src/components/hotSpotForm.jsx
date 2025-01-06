@@ -1,47 +1,67 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Joi from "joi-browser";
 import _ from "lodash";
-import Form from "./common/form";
+import { toast } from "react-toastify";
+import { handleSubmit, renderSubmitButton, renderInput, renderSelect } from "./common/form";
 import HotSpotsService from "../services/hotSpotsService";
 import MapsService from "../services/mapsService";
 import localStorageService from "../services/localStorageService";
 
-class HotSpotForm extends Form {
-  state = {
-    data: { name: "", description: "", zoomName: "" },
-    zoomableMaps: [],
-    mapName: "",
-    errors: {}
-  };
+function HotSpotForm() {
+  const [data, setData] = useState({ name: "", description: "", zoomName: "" });
+  const [zoomableMaps, setZoomableMaps] = useState([]);
+  const [mapName, setMapName] = useState("");
+  const [errors, setErrors] = useState({});
+  const [originalHotSpot, setOriginalHotSpot] = useState({});
+  const navigate = useNavigate();
+  const params = useParams();
 
-  async componentDidMount() {
-    // was ID provided? If so, acquire. If it is "new", then create a new one.
-    const mapId = this.props.match.params.mapId;
-    const hotSpotId = this.props.match.params.hotSpotId;
-    if (hotSpotId !== "New") {
-      try {
-        const hotSpot = await HotSpotsService.get(mapId, hotSpotId);
-        if (!hotSpot) {
-          this.props.history.replace("/notfound");
-          return;
-        }
-        this.setState({
-          data: this.hotSpotToViewModel(hotSpot),
-          originalHotSpot: hotSpot
-        });
-      } catch (ex) {
-        this.props.history.replace("/notfound");
-      }
+  // update a single error, can also clear the value
+  const setError = (inputName, errorMessage) => {
+    if (errorMessage)
+      setErrors({ ...errors, [inputName]: errorMessage });
+    else {
+      let { [inputName]: _, ...newErrors } = errors; // clear the one error message
+      setErrors(newErrors);
     }
-
-    const { zoomNames, currentMapName } = await this.getZoomableMaps();
-    this.setState({
-      zoomableMaps: zoomNames,
-      mapName: currentMapName
-    });
   }
 
-  hotSpotToViewModel(hotSpot) {
+  // update a single item of data
+  const setDataItem = (inputName, inputValue) => {
+    setData({ ...data, [inputName]: inputValue });
+  }
+
+  // initialize component
+  useEffect(() => {
+    // was ID provided? If so, acquire. If it is "new", then create a new one.
+    const mapId = params.mapId;
+    const hotSpotId = params.hotSpotId;
+    if (hotSpotId !== "New") {
+      HotSpotsService.get(mapId, hotSpotId)
+        .then(hotSpot => {
+          if (!hotSpot) {
+            navigate("/notfound");
+            return;
+          }
+          setData(hotSpotToViewModel(hotSpot));
+          setOriginalHotSpot(hotSpot);
+        })
+        .catch(() => {
+          navigate("/notfound", { replace: true });
+        })
+    }
+
+    // fill the combo box
+    getZoomableMaps()
+      .then(response => {
+        const { zoomNames, currentMapName } = response;
+        setZoomableMaps(zoomNames);
+        setMapName(currentMapName);
+      });
+  }, []);
+
+  const hotSpotToViewModel = hotSpot => {
     return {
       name: hotSpot.name,
       description: hotSpot.description,
@@ -49,7 +69,7 @@ class HotSpotForm extends Form {
     };
   }
 
-  schema = {
+  const schema = {
     name: Joi.string()
       .required()
       .label("Name"),
@@ -61,83 +81,78 @@ class HotSpotForm extends Form {
       .label("Zoom Name")
   };
 
-  doSubmit = async () => {
-    const hotSpot = { ...this.state.originalHotSpot };
-
-    hotSpot.name = this.state.data.name;
-    hotSpot.description = this.state.data.description;
-    hotSpot.zoomName = this.state.data.zoomName.trim();
-
-    // if the zoomname changed, then wipe out the zoom id because it is pointing to the wrong image
-    if (
-      this.state.originalHotSpot &&
-      this.state.originalHotSpot.zoomName !== hotSpot.zoomName
-    )
-      hotSpot.zoomId = null;
-
-    const mapId = this.props.match.params.mapId;
-
-    try {
-      await HotSpotsService.save(mapId, hotSpot);
-
-      this.props.history.push(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${mapId}`);
-    } catch (ex) {
-      const errorMessage = ex.response.data;
-      const isZoomError = errorMessage.search("zoom") >= 0;
-
-      const errors = { ...this.state.errors };
-      errors[isZoomError ? "zoomName" : "name"] = errorMessage;
-      this.setState({ errors });
-    }
+  const toastException = ex => {
+    if (ex.response)
+      if (ex.response.status >= 400 && ex.response.status < 500)
+        toast.error("Access denied!");
   };
 
-  getZoomableMaps = async () => {
-    const maps = await MapsService.getMapsByNovelId(localStorageService.getCurrentNovel());
-    let zoomNames = maps.map(m => ({ name: m.name, id: m._id }));
+  const doSubmit = () => {
+    const hotSpot = { ...originalHotSpot };
+
+    hotSpot.name = data.name;
+    hotSpot.description = data.description;
+    hotSpot.zoomName = data.zoomName.trim();
+
+    // if the zoomname changed, then wipe out the zoom id because it is pointing to the wrong image
+    if (originalHotSpot && originalHotSpot.zoomName !== hotSpot.zoomName)
+      hotSpot.zoomId = null;
+
+    const mapId = params.mapId;
+    HotSpotsService.save(mapId, hotSpot)
+      .then(() => {
+        navigate(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${mapId}`);
+      })
+      .catch(ex => {
+        const errorMessage = ex.response.data;
+        const isZoomError = errorMessage.search("zoom") >= 0;
+
+        const newErrors = { ...errors };
+        newErrors[isZoomError ? "zoomName" : "name"] = "Access denied";
+        setErrors(newErrors);
+
+        toastException(ex);
+      })
+  };
+
+  const getZoomableMaps = async () => {
+    const mapsList = await MapsService.getMapsByNovelId(localStorageService.getCurrentNovel());
+    let zoomNames = mapsList.map(m => ({ name: m.name, id: m._id }));
 
     // exclude the current map's name
-    const mapId = this.props.match.params.mapId;
-    const currentMap = maps.find(m => m._id === mapId);
+    const mapId = params.mapId;
+    const currentMap = mapsList.find(m => m._id === mapId);
     zoomNames = zoomNames.filter(n => n.name !== currentMap.name);
 
     // locate the map that zooms to this one and exclude that too
     // it won't eliminate all possible circular loops, but it'll help
-    const zoomParent = maps.find(m =>
-      m.hotSpots.find(h => h.zoomName === currentMap.name)
-    );
+    const zoomParent = mapsList.find(m => m.hotSpots.find(h => h.zoomName === currentMap.name));
     if (zoomParent)
       zoomNames = zoomNames.filter(n => n.name !== zoomParent.name);
 
     const sortedZoomNames = _.orderBy(zoomNames, "name", "asc");
-
     return { zoomNames: sortedZoomNames, currentMapName: currentMap.name };
     // can go crazier and eliminate all zooms from any hot spot of parent
     // can also go parent of parent
   };
 
-  render() {
-    return (
-      <div>
-        <h2>Hot Spot for {this.state.mapName}</h2>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("Name", "name")}
-          {this.renderInput("Description", "description")}
-          {this.renderSelect("Zoom Name", "zoomName", this.state.zoomableMaps)}
-          {this.renderSubmitButton("Submit")}
-          <button
-            className="btn btn-primary buttonSpacing"
-            onClick={() =>
-              this.props.history.replace(
-                `/${localStorageService.getCurrentNovel()}/hotspotseditor/${this.props.match.params.mapId}`
-              )
-            }
-          >
-            Cancel
-          </button>
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h2>Hot Spot for {mapName}</h2>
+      <form onSubmit={(e) => handleSubmit(e, doSubmit, schema, data, setErrors)}>
+        {renderInput("Name", "name", schema, data, setDataItem, errors, setError)}
+        {renderInput("Description", "description", schema, data, setDataItem, errors, setError)}
+        {renderSelect("Zoom Name", "zoomName", zoomableMaps, schema, data, setDataItem, errors, setError)}
+        {renderSubmitButton("Submit", schema, data)}
+        <button
+          className="btn btn-primary buttonSpacing"
+          onClick={() => navigate(`/${localStorageService.getCurrentNovel()}/hotspotseditor/${params.mapId}`, { replace: true })}
+        >
+          Cancel
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default HotSpotForm;
