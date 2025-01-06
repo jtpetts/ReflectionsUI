@@ -1,39 +1,37 @@
-import React, { Component } from "react";
+import React from "react";
 import localStorageService from "../../services/localStorageService";
 import novelService from "../../services/novelService";
 
-class MeadowSection extends Component {
-  render() {
-    const novelId = localStorageService.getCurrentNovel();
-    const backgroundImage = novelService.getHomeSecondImage(novelId);
-    const title = novelService.getHomeSecondTitle(novelId);
-    const description = novelService.getHomeSecondDescription(novelId);
+function MeadowSection() {
+  const novelId = localStorageService.getCurrentNovel();
+  const backgroundImage = novelService.getHomeSecondImage(novelId);
+  const title = novelService.getHomeSecondTitle(novelId);
+  const description = novelService.getHomeSecondDescription(novelId);
 
-    return (
-      <section
-        className="fullSection"
+  return (
+    <section
+      className="fullSection"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%"
+      }}
+    >
+      <div
+        className="fullHeight"
         style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "100% 100%"
+          display: "flex",
+          paddingLeft: "10%",
+          paddingRight: "10%"
         }}
       >
-        <div
-          className="fullHeight"
-          style={{
-            display: "flex",
-            paddingLeft: "10%",
-            paddingRight: "10%"
-          }}
-        >
-          <div style={{ color: "white" }}>
-            <h2>{title}</h2>
-            <p>{description}</p>
-          </div>
+        <div style={{ color: "white" }}>
+          <h2>{title}</h2>
+          <p>{description}</p>
         </div>
-      </section>
-    );
-  }
+      </div>
+    </section>
+  );
 }
 
 export default MeadowSection;

@@ -1,24 +1,22 @@
-import React, { Component } from "react";
+import React from "react";
 import Modal from "react-responsive-modal";
 
-class AreYouSureModal extends Component {
-  render() {
-    return (
-      <Modal open={this.props.open} onClose={this.props.onClose} center>
-        <h2>Are you sure?</h2>
-        <p>{this.props.modalMessage}</p>
-        <button className="btn btn-danger" onClick={this.props.onTrigger}>
-          {this.props.triggerLabel}
-        </button>
-        <button
-          className="btn btn-primary buttonSpacing"
-          onClick={this.props.onClose}
-        >
-          Cancel
-        </button>
-      </Modal>
-    );
-  }
+function AreYouSureModal(props) {
+  return (
+    <Modal open={props.open} onClose={props.onClose} center>
+      <h2>Are you sure?</h2>
+      <p>{props.modalMessage}</p>
+      <button className="btn btn-danger" onClick={props.onTrigger}>
+        {props.triggerLabel}
+      </button>
+      <button
+        className="btn btn-primary buttonSpacing"
+        onClick={props.onClose}
+      >
+        Cancel
+      </button>
+    </Modal>
+  );
 }
 
 export default AreYouSureModal;

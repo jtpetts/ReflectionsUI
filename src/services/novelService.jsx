@@ -44,24 +44,20 @@ const afterlifeNovel = {
 const novels = [reflectionsNovel, afterlifeNovel];
 
 function getNovel(novelId) {
-    const novel = novels.find((novel) => novel.novelId == novelId);
+    const novel = novels.find((novel) => novel.novelId === novelId);
     if (novel) return novel;
 
     return reflectionsNovel;
 }
 
 export function sanitizeNovelId(novelId) {
-    const novel = novels.find((novel) => novel.novelId == novelId);
+    const novel = novels.find((novel) => novel.novelId === novelId);
     if (novel) return novel.novelId;
 
     return reflectionsNovel.novelId;
 }
 
 function identifyNovelIdFromHref(href) {
-    console.log("novelservice.jsx.identifyNovelIdFromHref", { href: href });
-    console.log("novelservice.jsx.identifyNovelIdFromHref_2", { href: href,
-        hrefToString: href.toString(), hrefToStringToLowerCase: href.toString().toLowerCase() });
-
     const lowerCaseHref = href.toString().toLowerCase();
     const novel = novels.find((novel) => lowerCaseHref.includes(novel.novelId));
 
