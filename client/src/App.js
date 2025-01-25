@@ -17,7 +17,7 @@ import "./App.css";
 
 function App(props) {
 
-  console.log('app.jsx.itself', {props});
+  console.log('app.jsx entry', {props});
 
   return (
     <React.Fragment>
