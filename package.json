@@ -1,39 +1,41 @@
 {
-  "name": "reflectionsui",
+  "name": "serverjs-example",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@sentry/browser": "^4.6.6",
-    "axios": "^0.18.1",
-    "bootstrap": "^4.6.2",
-    "font-awesome": "^4.7.0",
-    "html-react-parser": "^5.1.18",
-    "joi-browser": "^13.4.0",
-    "jwt-decode": "^3.1.2",
-    "query-string": "^6.1.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-icons": "^3.11.0",
-    "react-responsive-modal": "^3.6.0",
-    "react-router-dom": "^6.28.1",
-    "react-scripts": "^5.0.1",
-    "react-toastify": "^4.5.2",
-    "react-transition-group": "^2.9.0"
+    "concurrently": "^9.1.2",
+    "cra-template": "1.2.0",
+    "express": "^4.21.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start_local": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deverino": "concurrently \"npm run server\" \"npm run start\"",
+    "client": "cd client && node start",
+    "server": "nodemon server.js",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

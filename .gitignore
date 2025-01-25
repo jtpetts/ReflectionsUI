@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/client/node_modules
+/client/.pnp
 /.pnp
 .pnp.js
 
@@ -9,7 +11,7 @@
 /coverage
 
 # production
-/build
+/client/build
 
 # misc
 .DS_Store
@@ -19,3 +21,11 @@ slnx.sqlite
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/client/.DS_Store
+/client/.env*
+/client/slnx.sqlite
+
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
