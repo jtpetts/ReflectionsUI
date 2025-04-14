@@ -23,8 +23,6 @@ function Images() {
   // initialize component
   useEffect(() => {
     localStorageService.setCurrentNovel(params.novelId);
-    console.log('images.jsx.useEffect', {params_novelId: params.novelId});
-
     try {
       const novelId = localStorageService.getCurrentNovel();
 

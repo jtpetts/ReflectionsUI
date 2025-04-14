@@ -18,7 +18,7 @@
     "react-router-dom": "^6.28.1",
     "react-scripts": "^5.0.1",
     "react-toastify": "^4.5.2",
-    "react-transition-group": "^2.9.0"
+    "react-transition-group": "^4.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

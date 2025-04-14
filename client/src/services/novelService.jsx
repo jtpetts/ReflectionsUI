@@ -43,18 +43,22 @@ const afterlifeNovel = {
 
 const novels = [reflectionsNovel, afterlifeNovel];
 
+function getDefaultNovel() {
+    return afterlifeNovel;
+}
+
 function getNovel(novelId) {
     const novel = novels.find((novel) => novel.novelId === novelId);
     if (novel) return novel;
 
-    return reflectionsNovel;
+    return getDefaultNovel();
 }
 
 export function sanitizeNovelId(novelId) {
     const novel = novels.find((novel) => novel.novelId === novelId);
     if (novel) return novel.novelId;
 
-    return reflectionsNovel.novelId;
+    return getDefaultNovel().novelId;
 }
 
 function identifyNovelIdFromHref(href) {
@@ -63,7 +67,7 @@ function identifyNovelIdFromHref(href) {
 
     if (novel) return novel.novelId;
 
-    return reflectionsNovel.novelId;
+    return getDefaultNovel().novelId;
 }
 
 export function getTitle(novelId) {

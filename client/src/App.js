@@ -15,10 +15,7 @@ import HotSpotForm from "./components/hotSpotForm";
 import NotFound from "./components/notFound";
 import "./App.css";
 
-function App(props) {
-
-  console.log('app.jsx entry', {props});
-
+function App() {
   return (
     <React.Fragment>
       <ToastContainer />
