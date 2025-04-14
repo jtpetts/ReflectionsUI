@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import AuthService from "../services/authService";
 import localStorageService from "../services/localStorageService";
@@ -17,19 +17,10 @@ function NavBar() {
     setIsCollapsed(true);
   }
 
-
-  // whenever location changes
-  useEffect(() => {
-    console.log('navbar.jsx.location:', location);
-  }, [location]);
-
-
-
   const affixNovel = (e, path) => {
     // navigate
     const novelId = localStorageService.getCurrentNovel();
     const destination = `/${novelId}/${path}`;
-    console.log("navBar.jsx.affixNovel", { novelId, destination, path, theeese_e: e, theees: this });
 
     navigate(destination);
     e.preventDefault();
@@ -52,8 +43,6 @@ function NavBar() {
 
   const novelId = localStorageService.getCurrentNovel();
   const navBarName = NovelService.getNavBarName(novelId);
-
-  console.log("NavBar.jsx.itself", { user, novelId, pathname, location: location });
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">

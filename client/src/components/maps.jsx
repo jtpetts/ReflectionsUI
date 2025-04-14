@@ -30,7 +30,6 @@ function Maps() {
   useEffect(() => {
     localStorageService.setCurrentNovel(params.novelId);
     const novelId = localStorageService.getCurrentNovel();
-    console.log("maps.jsx.useEffect", { params_novelId: params.novelId, novelId });
 
     MapsService.getMapsByNovelId(novelId)
       .then(response => {
